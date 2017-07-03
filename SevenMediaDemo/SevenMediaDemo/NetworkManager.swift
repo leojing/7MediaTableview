@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AFNetworking
 import SwiftyJSON
 
 class NetworkManager: NSObject {
@@ -15,15 +14,19 @@ class NetworkManager: NSObject {
   
   func getDataWithFile(_ fileId: String, completionHandler:@escaping (_ data: JSON?, _ error: Error?) -> Void) {
     let requestURL = baseURLString + fileId
-    AFHTTPSessionManager().get(requestURL, parameters: nil, progress: nil, success: { (task, responseObject) in
-        guard let json = responseObject else {
-          return
-        }
-        let data = JSON(json)
-        completionHandler(data, nil)
-    }, failure: { (task, error) in
+    let task = URLSession.shared.dataTask(with: URL(string: requestURL)!) { (data, response, error) in
+      if let error = error {
         completionHandler(nil, error)
-    })
+        return
+      }
+      
+      guard let data = data else {
+        completionHandler(nil, nil)
+        return
+      }
+      completionHandler(JSON(data: data), nil)
+    }
+    task.resume()
   }
 
 }

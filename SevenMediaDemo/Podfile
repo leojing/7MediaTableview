@@ -6,7 +6,6 @@ use_frameworks!
 target 'SevenMediaDemo' do
 
   pod 'SwiftyJSON'
-  pod 'AFNetworking'
   pod 'SDWebImage'
 
 end
