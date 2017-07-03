@@ -1,0 +1,22 @@
+
+platform :ios, '9.2'
+use_frameworks!
+
+
+target 'SevenMediaDemo' do
+
+  pod 'SwiftyJSON'
+  pod 'AFNetworking'
+  pod 'SDWebImage'
+
+end
+
+
+target 'SevenMediaDemoTests' do
+  use_frameworks!
+  
+  pod 'SwiftyJSON'
+  
+end
+
+

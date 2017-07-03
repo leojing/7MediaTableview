@@ -1,7 +1,3 @@
-# 7MediaTableview
-mvvm+swift
-
-
 
 ## Specs
 
