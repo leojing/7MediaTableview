@@ -11,10 +11,12 @@ import UIKit
 class ProgramsViewController: UITableViewController {
   
   fileprivate let viewModel = ViewModel()
-  var channelId: Int?
+  var channelId: Int = -1
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    self.navigationItem.title = "Channel \(channelId)"
     setUp()
   }
   
@@ -28,8 +30,8 @@ class ProgramsViewController: UITableViewController {
 extension ProgramsViewController {
   fileprivate func setUp() {
     viewModel.dataType = .program(channelId)
-    viewModel.startFetchDataFor(viewModel.dataType) { (array) in
-      if array.count > 0 {
+    viewModel.startFetchDataFor(viewModel.dataType) {
+      if $0.count > 0 {
         DispatchQueue.main.async { self.tableView.reloadData() }
       }
     }

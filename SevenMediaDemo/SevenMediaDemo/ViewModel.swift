@@ -13,7 +13,7 @@ import SDWebImage
 
 enum DataType {
   case channel
-  case program(Int?)
+  case program(Int)
   
   func fileID() -> String {
     switch self {
@@ -21,35 +21,17 @@ enum DataType {
       return "channel_list.json"
       
     case .program(let id):
-      if let id = id {
-        return "channel_programs_\(id).json"
-      } else {
-        return "channel_programs_.json"
-      }
+      return "channel_programs_\(id).json"
     }
   }
   
   func parseWithJSON(_ json: JSON) -> [DisplayDataProtocol?] {
     switch self {
     case .channel:
-      return json["channels"].map({ (_, j) -> Channel? in
-        return Channel(j)
-      }).sorted(by: { (a, b) -> Bool in
-        if let a = a, let b = b {
-          return a.displayOrder < b.displayOrder
-        }
-        return false
-      })
+      return json["channels"].filter{ $1 != JSON.null }.map{ Channel($1)! }.sorted{ $0 < $1 }
       
     case .program:
-      return json["programs"].map({ (_, j) -> Program? in
-        return Program(j)
-      }).sorted(by: { (a, b) -> Bool in
-        if let a = a, let b = b {
-          return a.start_time < b.start_time
-        }
-        return false
-      })
+      return json["programs"].filter{ $1 != JSON.null }.map{ Program($1)! }.sorted{ $0 < $1 }
     }
   }
 }
@@ -80,9 +62,7 @@ class ViewModel: NSObject {
         }
         
         // filter nil
-        self.dataArray = dataType.parseWithJSON(data).filter({ (data) -> Bool in
-          return data != nil
-        }) as! [DisplayDataProtocol]
+        self.dataArray = dataType.parseWithJSON(data).filter{ $0 != nil } as! [DisplayDataProtocol]
         
         if let completionHandler = completionHandler {
           completionHandler(self.dataArray)
@@ -111,6 +91,7 @@ extension ViewModel: CellRepresentable {
 
     let data = dataArray[indexPath.row]
     cell.textLabel?.text = data.title
+    cell.detailTextLabel?.text = data.subTitle
     if let imageUrl = data.imageUrl {
       cell.imageView?.sd_setImage(with: URL(string: imageUrl), completed: { (_, _, _, _) in
        cell.setNeedsLayout()

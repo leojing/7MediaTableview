@@ -66,8 +66,8 @@ class SevenMediaDemoTests: XCTestCase {
       XCTAssertEqual(dataType.fileID(), "channel_list.json")
       dataType = DataType.program(3)
       XCTAssertEqual(dataType.fileID(), "channel_programs_3.json")
-      dataType = DataType.program(nil)
-      XCTAssertEqual(dataType.fileID(), "channel_programs_.json")
+      dataType = DataType.program(2)
+      XCTAssertEqual(dataType.fileID(), "channel_programs_2.json")
     }
   
     func testParseOrderChannels() {

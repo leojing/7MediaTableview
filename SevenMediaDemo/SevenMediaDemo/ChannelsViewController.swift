@@ -27,8 +27,10 @@ class ChannelsViewController: UITableViewController {
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == Constants.showProgramList {
-      let controller = segue.destination as! ProgramsViewController
-      controller.channelId = sender as? Int
+      if let channelId = sender {
+        let controller = segue.destination as! ProgramsViewController
+        controller.channelId = channelId as! Int
+      }
     }
   }
 
@@ -41,8 +43,8 @@ extension ChannelsViewController {
   fileprivate func setUp() {
     
     viewModel.dataType = .channel
-    viewModel.startFetchDataFor(viewModel.dataType) { (array) in
-      if array.count > 0 {
+    viewModel.startFetchDataFor(viewModel.dataType) {
+      if $0.count > 0 {
         DispatchQueue.main.async { self.tableView.reloadData() }
       }
     }

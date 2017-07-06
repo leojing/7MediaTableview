@@ -18,6 +18,7 @@ struct Channel: DisplayDataProtocol {
   // MARK: comform to DisplayDataProtocol
   var imageUrl: String?
   var title: String?
+  var subTitle: String?
 }
 
 // MARK: - init with json
@@ -38,13 +39,22 @@ extension Channel {
     
     self.imageUrl = nil
     self.title = self.name
+    self.subTitle = String(self.displayOrder)
   }
 }
 
-extension Channel: Equatable {
+extension Channel: Comparable {
   static func ==(lhs: Channel, rhs: Channel) -> Bool {
     return (lhs.channelId == rhs.channelId) &&
     (lhs.displayOrder == rhs.displayOrder) &&
     (lhs.name == rhs.name)
   }
+  
+  static func <(lhs: Channel, rhs: Channel) -> Bool {
+    return lhs.displayOrder < rhs.displayOrder
+  }
 }
+
+
+
+

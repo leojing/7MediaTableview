@@ -20,9 +20,9 @@ import UIKit
   func cellInstance(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
 }
 
-
 protocol DisplayDataProtocol {
   
   var imageUrl: String? { get set }
   var title: String? { get set }
+  var subTitle: String? { get set }
 }
